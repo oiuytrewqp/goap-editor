@@ -1,0 +1,99 @@
+Requirements:
+
+Think more about inventory and items as they dont seem to be directly GOAP but a external functionality that sets GOAP beliefs
+
+https://www.gitkraken.com/learn/git/git-flow
+
+https://dev.to/varbsan/a-simplified-convention-for-naming-branches-and-commits-in-git-il4
+
+Have the world and agents.
+Both the world and agents have;
+- inventories
+- beliefs
+- actions
+- goals
+Able to create actions
+- prerequisites
+-- world and agent belief states
+- outcomes
+-- world and agent belief states
+- action function
+- action location
+Able to create agents
+Able to create beliefs
+- world beliefs
+- agent beliefs
+Able to create goals
+- outcomes
+-- world and agent belief states
+Save everything in json format
+Create items that can be used in inventories
+Add and remove items from inventories
+Add and remove beliefs
+Add and remove actions from agents
+Add and remove goals from agents
+
+How to display:
+Main view:
+List view of world and agents on the left with world at the top separated from the agents
+Clickable to select, but world is defaul selected
+View selected next to the previous list
+Show beliefs, goals, actions and inventory as separate columns
+Each column has an add button to add more
+Each row has a delete icon to remove an item
+Clicking on somethtin allows you to edit it
+Edits are shown on the far right
+Beliefs allow the name to be change as well as the state
+- number? bool? string? Object?
+Actions allow the name, list of prerequisites and their values, list of outcomes and their values, the action funcion and action location to be changed
+-- action location is a string
+Goals allow the name and list of outsomes and their value to be changed
+*Inventory allows items to be added
+
+Create a game view where the world and locations are shown. The location is shown as a grid.
+A selection box is shown on the right hand side that shows the details of the selected thing.
+Each agent name is placed in a location.
+The world and agents are selectable.
+There is a step button that performs one time action so that the system can be worked through to test
+This will allow agents to use the generated json to make plans and exec them
+
+
+Program structure:
+goap structures:
+Action, world, agent
+
+
+layout:
+main:
+flex-h
+-flex-v (agents)
+--button(world)
+--sep
+--button (add)
+--list(agents)
+---button(agent)
+-flex-v (agent)
+--label (beliefs)
+--button (add)
+--list
+---button (beliefs)
+--sep
+--label (goals)
+--button (add)
+--list
+---button (goals)
+--sep
+--label (actions)
+--button (add)
+--list
+---button (actions)
+-flex-v (belief)
+--label (belief)
+-flex-v (goal)
+--label (goal)
+--list (beliefs)
+---button (belief)
+-flex-v (action)
+--label (action)
+--list (prerequisites)
+---button (belief)
