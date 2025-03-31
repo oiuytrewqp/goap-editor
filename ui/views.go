@@ -8,25 +8,26 @@ import (
 )
 
 type Views struct {
-	WorldView  WorldView
-	AgentView  AgentView
-	BeliefView BeliefView
-	GoalView   GoalView
-	ActionView ActionView
+	WorldView  *WorldView
+	AgentView  *AgentView
+	BeliefView *BeliefView
+	GoalView   *GoalView
+	ActionView *ActionView
 }
 
 func NewViews(theme *material.Theme, data *goap.Goap) *Views {
 	return &Views{
-		WorldView:  *NewWorldView(theme, &data.World, &data.Agents),
-		AgentView:  *NewAgentView(theme),
-		BeliefView: *NewBeliefView(theme),
-		GoalView:   *NewGoalView(theme),
-		ActionView: *NewActionView(theme),
+		WorldView:  NewWorldView(theme, &data.World, &data.Agents),
+		AgentView:  NewAgentView(theme),
+		BeliefView: NewBeliefView(theme),
+		GoalView:   NewGoalView(theme),
+		ActionView: NewActionView(theme),
 	}
 }
 
 func (views *Views) Layout(context layout.Context) layout.Dimensions {
-	views.AgentView.Agent = &views.WorldView.Selected
+	views.AgentView.SetAgent(views.WorldView.SelectedAgent)
+	//views.ActionView.Action = &views.WorldView.SelectedAgent
 
 	return layout.Flex{}.Layout(context,
 		layout.Rigid(views.WorldView.Layout),

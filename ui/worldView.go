@@ -9,49 +9,52 @@ import (
 )
 
 type WorldView struct {
-	theme         material.Theme
-	world         goap.Agent
-	worldButton   AgentButton
-	agents        []goap.Agent
-	agentsButtons []AgentButton
-	Selected      goap.Agent
+	theme         *material.Theme
+	world         *goap.Agent
+	worldButton   *AgentButton
+	agents        *[]goap.Agent
+	agentsButtons *[]AgentButton
+	SelectedAgent *goap.Agent
 }
 
 func NewWorldView(theme *material.Theme, world *goap.Agent, agents *[]goap.Agent) *WorldView {
-	newAgentsButtons := make([]AgentButton, len(*agents))
-	for i, agent := range *agents {
-		newAgentsButtons[i] = *NewAgentButton(theme, &agent)
-	}
-
 	return &WorldView{
-		theme:         *theme,
-		world:         *world,
-		worldButton:   *NewAgentButton(theme, world),
-		agents:        *agents,
-		agentsButtons: newAgentsButtons,
+		theme:       theme,
+		world:       world,
+		worldButton: NewAgentButton(theme, world),
+		agents:      agents,
 	}
 }
 
 func (worldView *WorldView) Layout(context layout.Context) layout.Dimensions {
-	if worldView.worldButton.Clicked {
-		worldView.Selected = worldView.world
+	if worldView.agentsButtons == nil {
+		agentsButtons := make([]AgentButton, len(*worldView.agents))
+		for i, agent := range *worldView.agents {
+			agentsButtons[i] = *NewAgentButton(worldView.theme, &agent)
+		}
+
+		worldView.agentsButtons = &agentsButtons
 	}
 
-	for i, agentsButton := range worldView.agentsButtons {
+	if worldView.worldButton.Clicked {
+		worldView.SelectedAgent = worldView.world
+	}
+
+	for i, agentsButton := range *worldView.agentsButtons {
 		if agentsButton.Clicked {
-			worldView.Selected = worldView.agents[i]
+			worldView.SelectedAgent = &(*worldView.agents)[i]
 		}
 	}
 
 	agentLayouts := []layout.FlexChild{
-		layout.Rigid(material.Label(&worldView.theme, unit.Sp(float32(35)), "World:").Layout),
+		layout.Rigid(material.Label(worldView.theme, unit.Sp(float32(35)), "World:").Layout),
 		layout.Rigid(layout.Spacer{Width: 20}.Layout),
 		layout.Rigid(worldView.worldButton.Layout),
 		layout.Rigid(layout.Spacer{Width: 20}.Layout),
-		layout.Rigid(material.Label(&worldView.theme, unit.Sp(float32(35)), "Agents:").Layout),
+		layout.Rigid(material.Label(worldView.theme, unit.Sp(float32(35)), "Agents:").Layout),
 	}
-	for i, _ := range worldView.agentsButtons {
-		agentLayouts = append(agentLayouts, layout.Rigid(worldView.agentsButtons[i].Layout))
+	for i, _ := range *worldView.agentsButtons {
+		agentLayouts = append(agentLayouts, layout.Rigid((*worldView.agentsButtons)[i].Layout))
 	}
 
 	return layout.Flex{
