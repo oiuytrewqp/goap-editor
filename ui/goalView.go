@@ -19,3 +19,6 @@ func NewGoalView(theme *material.Theme) *GoalView {
 func (goalView *GoalView) Layout(context layout.Context) layout.Dimensions {
 	return material.Label(&goalView.theme, unit.Sp(float32(35)), "Goal").Layout(context)
 }
+
+func (goalView *GoalView) SetGoal(goal string, value int) {
+}

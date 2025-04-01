@@ -6,6 +6,13 @@ https://www.gitkraken.com/learn/git/git-flow
 
 https://dev.to/varbsan/a-simplified-convention-for-naming-branches-and-commits-in-git-il4
 
+
+TODO:
+roll the buttons into one
+add delete to the button
+maybe make the button remove items when the delete is clicked
+
+
 Have the world and agents.
 Both the world and agents have;
 - inventories

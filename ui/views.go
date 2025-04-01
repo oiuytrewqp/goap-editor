@@ -27,7 +27,9 @@ func NewViews(theme *material.Theme, data *goap.Goap) *Views {
 
 func (views *Views) Layout(context layout.Context) layout.Dimensions {
 	views.AgentView.SetAgent(views.WorldView.SelectedAgent)
-	//views.ActionView.Action = &views.WorldView.SelectedAgent
+	//views.BeliefView.SetBelief(views.AgentView.SelectedBelief)
+	//views.GoalView.SetGoal(views.AgentView.SelectedGoal)
+	views.ActionView.SetAction(views.AgentView.SelectedAction)
 
 	return layout.Flex{}.Layout(context,
 		layout.Rigid(views.WorldView.Layout),
