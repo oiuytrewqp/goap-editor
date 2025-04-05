@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"oiuytrewqp/goap-editor/goap"
+
 	"gioui.org/layout"
 	"gioui.org/unit"
 	"gioui.org/widget/material"
@@ -8,13 +10,15 @@ import (
 
 type BeliefView struct {
 	theme  material.Theme
+	data   *goap.Goap
 	belief string
 	value  int
 }
 
-func NewBeliefView(theme *material.Theme) *BeliefView {
+func NewBeliefView(theme *material.Theme, data *goap.Goap) *BeliefView {
 	return &BeliefView{
 		theme: *theme,
+		data:  data,
 	}
 }
 

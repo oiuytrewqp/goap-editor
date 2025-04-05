@@ -5,19 +5,15 @@ import "oiuytrewqp/goap-editor/utils"
 type Action struct {
 	Id            int
 	Name          string
-	Prerequisites Beliefs
-	Outcomes      Beliefs
-	Action        string
-	Location      string
+	Prerequisites map[int]int
+	Outcomes      map[int]int
+	Action        int
+	Location      int
 }
 
 func NewAction(name string) *Action {
 	return &Action{
-		Id:            utils.GetId(),
-		Name:          name,
-		Prerequisites: make(Beliefs),
-		Outcomes:      make(Beliefs),
-		Action:        "",
-		Location:      "",
+		Id:   utils.GetId(),
+		Name: name,
 	}
 }

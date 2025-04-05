@@ -1,99 +1,109 @@
 package goap
 
+import (
+	"oiuytrewqp/goap-editor/file"
+)
+
 type Goap struct {
-	World     Agent
-	Locations []string
-	items     []string
-	actions   map[string]Action
-	Agents    []Agent
+	World       int
+	WorldAgents []int
+	Agents      map[int]Agent
+	Locations   map[int]Location
+	items       map[int]Item
+	Beliefs     map[int]Belief
+	Actions     map[int]Action
+	Goals       map[int]Goal
 }
 
 func NewGoap() Goap {
-	newGoap := Goap{}
+	newGoap := Goap{
+		Agents:    make(map[int]Agent),
+		Locations: make(map[int]Location),
+		items:     make(map[int]Item),
+		Beliefs:   make(map[int]Belief),
+		Actions:   make(map[int]Action),
+		Goals:     make(map[int]Goal),
+	}
 
-	newGoap.World = *NewAgent("World")
+	atEnterance := newGoap.createBelief("atEnterance")
+	resistered := newGoap.createBelief("resistered")
+	waitingInWaitingRoom := newGoap.createBelief("waitingInWaitingRoom")
+	waiting := newGoap.createBelief("waiting")
+	waitingInBreakRoom := newGoap.createBelief("waitingInBreakRoom")
 
-	newGoap.Locations = make([]string, 5)
-	newGoap.Locations[0] = "Home"
-	newGoap.Locations[1] = "Enterance"
-	newGoap.Locations[2] = "Reception"
-	newGoap.Locations[3] = "Waiting Room"
-	newGoap.Locations[4] = "Break Room"
+	goToHospital := newGoap.createAction("Go to Hospital", nil, map[int]int{atEnterance: 1})
+	goResisteredAtReception := newGoap.createAction("Register at Reception", map[int]int{atEnterance: 1}, map[int]int{resistered: 1})
+	goWaitingInWaitingRoom := newGoap.createAction("Wait in Waiting Room", map[int]int{resistered: 1}, map[int]int{waitingInWaitingRoom: 1})
+	goHome := newGoap.createAction("Go Home", map[int]int{waiting: 1}, nil)
+	goWaitingInBreakRoom := newGoap.createAction("Wait in Break Room", map[int]int{atEnterance: 1}, map[int]int{waitingInBreakRoom: 1})
 
-	newGoap.items = make([]string, 3)
-	newGoap.items[0] = "Booth 1"
-	newGoap.items[1] = "Booth 2"
-	newGoap.items[2] = "Booth 3"
+	newGoap.createLocation("Home")
+	newGoap.createLocation("Enterance")
+	newGoap.createLocation("Reception")
+	newGoap.createLocation("Waiting Room")
+	newGoap.createLocation("Break Room")
 
-	newGoap.actions = make(map[string]Action)
+	newGoap.createItem("Booth 1")
+	newGoap.createItem("Booth 2")
+	newGoap.createItem("Booth 3")
 
-	var goToHospital = *NewAction("Go to Hospital")
-	goToHospital.Outcomes["atEnterance"] = 1
+	newGoap.World = newGoap.addAgent("Hospital", nil)
 
-	newGoap.actions["Go to Hospital"] = goToHospital
+	newGoap.addAgent("Nurse 1", []int{goToHospital, goWaitingInBreakRoom})
+	newGoap.addAgent("Nurse 2", []int{goToHospital, goWaitingInBreakRoom})
+	newGoap.addAgent("Nurse 3", []int{goToHospital, goWaitingInBreakRoom})
 
-	var registerAtReception = *NewAction("Register at Reception")
-	registerAtReception.Prerequisites["atEnterance"] = 1
-	registerAtReception.Outcomes["resistered"] = 1
+	newGoap.addAgent("Patient 1", []int{goToHospital, goResisteredAtReception, goWaitingInWaitingRoom, goHome})
+	newGoap.addAgent("Patient 2", []int{goToHospital, goResisteredAtReception, goWaitingInWaitingRoom, goHome})
+	newGoap.addAgent("Patient 3", []int{goToHospital, goResisteredAtReception, goWaitingInWaitingRoom, goHome})
+	newGoap.addAgent("Patient 4", []int{goToHospital, goResisteredAtReception, goWaitingInWaitingRoom, goHome})
+	newGoap.addAgent("Patient 5", []int{goToHospital, goResisteredAtReception, goWaitingInWaitingRoom, goHome})
+	newGoap.addAgent("Patient 6", []int{goToHospital, goResisteredAtReception, goWaitingInWaitingRoom, goHome})
 
-	newGoap.actions["Register at Reception"] = registerAtReception
+	newGoap.WorldAgents = make([]int, len(newGoap.Agents)-1)
+	i := 0
+	for _, agent := range newGoap.Agents {
+		if agent.Id != newGoap.World {
+			newGoap.WorldAgents[i] = agent.Id
+			i++
+		}
+	}
 
-	var waitInWaitingRoom = *NewAction("Wait in Waiting Room")
-	waitInWaitingRoom.Prerequisites["resistered"] = 1
-	waitInWaitingRoom.Outcomes["waitingInWaitingRoom"] = 1
-
-	newGoap.actions["Wait in Waiting Room"] = waitInWaitingRoom
-
-	var goHome = *NewAction("Go Home")
-	goHome.Prerequisites["waiting"] = 1
-
-	newGoap.actions["Go Home"] = goHome
-
-	var waitInBreakRoom = *NewAction("Wait in Break Room")
-	waitInBreakRoom.Prerequisites["atEnterance"] = 1
-	waitInBreakRoom.Outcomes["waitingInBreakRoom"] = 1
-
-	var nurseActions = make([]Action, 2)
-	nurseActions[0] = goToHospital
-	nurseActions[1] = waitInBreakRoom
-
-	var pateintActions = make([]Action, 4)
-	pateintActions[0] = goToHospital
-	pateintActions[1] = registerAtReception
-	pateintActions[2] = waitInWaitingRoom
-	pateintActions[3] = goHome
-
-	newGoap.Agents = make([]Agent, 8)
-	newGoap.Agents[0] = *newGoap.newNurse("Nurse 1")
-	newGoap.Agents[1] = *newGoap.newNurse("Nurse 2")
-	newGoap.Agents[2] = *newGoap.newPatient("Pateint 1")
-	newGoap.Agents[3] = *newGoap.newPatient("Pateint 2")
-	newGoap.Agents[4] = *newGoap.newPatient("Pateint 5")
-	newGoap.Agents[5] = *newGoap.newPatient("Pateint 6")
-	newGoap.Agents[6] = *newGoap.newPatient("Pateint 7")
-	newGoap.Agents[7] = *newGoap.newPatient("Pateint 8")
+	file.Save("data", "test.json", newGoap)
 
 	return newGoap
 }
 
-func (goap *Goap) newNurse(name string) *Agent {
-	var nurse = NewAgent(name)
-	nurse.Actions = []Action{
-		goap.actions["Go to Hospital"],
-		goap.actions["Wait in Break Room"],
-	}
+func (goap Goap) addAgent(name string, actions []int) int {
+	newAgent := NewAgent(name)
+	newAgent.Actions = actions
+	goap.Agents[newAgent.Id] = *newAgent
 
-	return nurse
+	return newAgent.Id
 }
 
-func (goap *Goap) newPatient(name string) *Agent {
-	var patient = NewAgent(name)
-	patient.Actions = []Action{
-		goap.actions["Go to Hospital"],
-		goap.actions["Register at Reception"],
-		goap.actions["Wait in Waiting Room"],
-		goap.actions["Go Home"],
-	}
+func (goap Goap) createBelief(name string) int {
+	newBelief := *NewBelief(name)
+	goap.Beliefs[newBelief.Id] = newBelief
 
-	return patient
+	return newBelief.Id
+}
+
+func (goap Goap) createAction(name string, prerequisites map[int]int, outcomes map[int]int) int {
+	newAction := *NewAction(name)
+	newAction.Prerequisites = prerequisites
+	newAction.Outcomes = outcomes
+	goap.Actions[newAction.Id] = newAction
+
+	return newAction.Id
+}
+
+func (goap Goap) createLocation(name string) {
+	newLocation := *NewLocation(name)
+	goap.Locations[newLocation.Id] = newLocation
+}
+
+func (goap Goap) createItem(name string) {
+	newItem := *NewItem(name)
+	goap.items[newItem.Id] = newItem
 }

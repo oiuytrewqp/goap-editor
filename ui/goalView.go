@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"oiuytrewqp/goap-editor/goap"
+
 	"gioui.org/layout"
 	"gioui.org/unit"
 	"gioui.org/widget/material"
@@ -8,11 +10,13 @@ import (
 
 type GoalView struct {
 	theme material.Theme
+	data  *goap.Goap
 }
 
-func NewGoalView(theme *material.Theme) *GoalView {
+func NewGoalView(theme *material.Theme, data *goap.Goap) *GoalView {
 	return &GoalView{
 		theme: *theme,
+		data:  data,
 	}
 }
 

@@ -17,11 +17,11 @@ type Views struct {
 
 func NewViews(theme *material.Theme, data *goap.Goap) *Views {
 	return &Views{
-		WorldView:  NewWorldView(theme, &data.World, &data.Agents),
-		AgentView:  NewAgentView(theme),
-		BeliefView: NewBeliefView(theme),
-		GoalView:   NewGoalView(theme),
-		ActionView: NewActionView(theme),
+		WorldView:  NewWorldView(theme, data),
+		AgentView:  NewAgentView(theme, data),
+		BeliefView: NewBeliefView(theme, data),
+		GoalView:   NewGoalView(theme, data),
+		ActionView: NewActionView(theme, data),
 	}
 }
 

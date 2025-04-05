@@ -15,10 +15,10 @@ type GoalButton struct {
 	Clicked bool
 }
 
-func NewGoalButton(theme *material.Theme, goal *goap.Goal) *GoalButton {
+func NewGoalButton(theme *material.Theme, goal goap.Goal) *GoalButton {
 	return &GoalButton{
 		theme:   *theme,
-		goal:    *goal,
+		goal:    goal,
 		Clicked: false,
 	}
 }
@@ -27,4 +27,8 @@ func (goalButton *GoalButton) Layout(context layout.Context) layout.Dimensions {
 	goalButton.Clicked = goalButton.button.Clicked(context)
 
 	return material.Button(&goalButton.theme, &goalButton.button, goalButton.goal.Name).Layout(context)
+}
+
+func (goalButton *GoalButton) GetId() int {
+	return goalButton.goal.Id
 }

@@ -1,0 +1,228 @@
+{
+  "World": 19,
+  "WorldAgents": [
+    25,
+    28,
+    23,
+    24,
+    26,
+    27,
+    20,
+    21,
+    22
+  ],
+  "Agents": {
+    "19": {
+      "Id": 19,
+      "Name": "Hospital",
+      "Beliefs": null,
+      "Actions": null,
+      "Goals": null
+    },
+    "20": {
+      "Id": 20,
+      "Name": "Nurse 1",
+      "Beliefs": null,
+      "Actions": [
+        6,
+        10
+      ],
+      "Goals": null
+    },
+    "21": {
+      "Id": 21,
+      "Name": "Nurse 2",
+      "Beliefs": null,
+      "Actions": [
+        6,
+        10
+      ],
+      "Goals": null
+    },
+    "22": {
+      "Id": 22,
+      "Name": "Nurse 3",
+      "Beliefs": null,
+      "Actions": [
+        6,
+        10
+      ],
+      "Goals": null
+    },
+    "23": {
+      "Id": 23,
+      "Name": "Patient 1",
+      "Beliefs": null,
+      "Actions": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "Goals": null
+    },
+    "24": {
+      "Id": 24,
+      "Name": "Patient 2",
+      "Beliefs": null,
+      "Actions": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "Goals": null
+    },
+    "25": {
+      "Id": 25,
+      "Name": "Patient 3",
+      "Beliefs": null,
+      "Actions": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "Goals": null
+    },
+    "26": {
+      "Id": 26,
+      "Name": "Patient 4",
+      "Beliefs": null,
+      "Actions": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "Goals": null
+    },
+    "27": {
+      "Id": 27,
+      "Name": "Patient 5",
+      "Beliefs": null,
+      "Actions": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "Goals": null
+    },
+    "28": {
+      "Id": 28,
+      "Name": "Patient 6",
+      "Beliefs": null,
+      "Actions": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "Goals": null
+    }
+  },
+  "Locations": {
+    "11": {
+      "Id": 11,
+      "Name": "Home"
+    },
+    "12": {
+      "Id": 12,
+      "Name": "Enterance"
+    },
+    "13": {
+      "Id": 13,
+      "Name": "Reception"
+    },
+    "14": {
+      "Id": 14,
+      "Name": "Waiting Room"
+    },
+    "15": {
+      "Id": 15,
+      "Name": "Break Room"
+    }
+  },
+  "Beliefs": {
+    "1": {
+      "Id": 1,
+      "Name": "atEnterance"
+    },
+    "2": {
+      "Id": 2,
+      "Name": "resistered"
+    },
+    "3": {
+      "Id": 3,
+      "Name": "waitingInWaitingRoom"
+    },
+    "4": {
+      "Id": 4,
+      "Name": "waiting"
+    },
+    "5": {
+      "Id": 5,
+      "Name": "waitingInBreakRoom"
+    }
+  },
+  "Actions": {
+    "10": {
+      "Id": 10,
+      "Name": "Wait in Break Room",
+      "Prerequisites": {
+        "1": 1
+      },
+      "Outcomes": {
+        "5": 1
+      },
+      "Action": 0,
+      "Location": 0
+    },
+    "6": {
+      "Id": 6,
+      "Name": "Go to Hospital",
+      "Prerequisites": null,
+      "Outcomes": {
+        "1": 1
+      },
+      "Action": 0,
+      "Location": 0
+    },
+    "7": {
+      "Id": 7,
+      "Name": "Register at Reception",
+      "Prerequisites": {
+        "1": 1
+      },
+      "Outcomes": {
+        "2": 1
+      },
+      "Action": 0,
+      "Location": 0
+    },
+    "8": {
+      "Id": 8,
+      "Name": "Wait in Waiting Room",
+      "Prerequisites": {
+        "2": 1
+      },
+      "Outcomes": {
+        "3": 1
+      },
+      "Action": 0,
+      "Location": 0
+    },
+    "9": {
+      "Id": 9,
+      "Name": "Go Home",
+      "Prerequisites": {
+        "4": 1
+      },
+      "Outcomes": null,
+      "Action": 0,
+      "Location": 0
+    }
+  },
+  "Goals": {}
+}

@@ -104,3 +104,40 @@ flex-h
 --label (action)
 --list (prerequisites)
 ---button (belief)
+
+
+agent
+-id
+-name
+-beliefs [id, int]
+-actions [id]
+-goals [id]
+
+belief
+-id
+-name
+
+action
+-id
+-name
+-prerequisites (state) [id, int]
+-outcomes (state) [id, int]
+-function [id]
+-location [id]
+
+state
+-id
+-name
+
+functions
+-id
+-name
+
+location
+-id
+-name
+
+goal
+-id
+-name
+-outcomes (state) [id, int]

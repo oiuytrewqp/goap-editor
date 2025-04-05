@@ -10,19 +10,28 @@ import (
 
 type WorldView struct {
 	theme         *material.Theme
+	data          *goap.Goap
 	world         *goap.Agent
 	worldButton   *AgentButton
 	agents        *[]goap.Agent
 	agentsButtons *[]AgentButton
-	SelectedAgent *goap.Agent
+	SelectedAgent int
 }
 
-func NewWorldView(theme *material.Theme, world *goap.Agent, agents *[]goap.Agent) *WorldView {
+func NewWorldView(theme *material.Theme, data *goap.Goap) *WorldView {
+	world := data.Agents[data.World]
+
+	worldAgents := make([]goap.Agent, len(data.WorldAgents))
+	for i, agent := range data.WorldAgents {
+		worldAgents[i] = data.Agents[agent]
+	}
+
 	return &WorldView{
 		theme:       theme,
-		world:       world,
-		worldButton: NewAgentButton(theme, world),
-		agents:      agents,
+		data:        data,
+		world:       &world,
+		worldButton: NewAgentButton(theme, &world),
+		agents:      &worldAgents,
 	}
 }
 
@@ -37,12 +46,12 @@ func (worldView *WorldView) Layout(context layout.Context) layout.Dimensions {
 	}
 
 	if worldView.worldButton.Clicked {
-		worldView.SelectedAgent = worldView.world
+		worldView.SelectedAgent = worldView.world.Id
 	}
 
 	for i, agentsButton := range *worldView.agentsButtons {
 		if agentsButton.Clicked {
-			worldView.SelectedAgent = &(*worldView.agents)[i]
+			worldView.SelectedAgent = (*worldView.agents)[i].Id
 		}
 	}
 

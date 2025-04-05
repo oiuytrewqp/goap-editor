@@ -2,13 +2,13 @@ package goap
 
 import "oiuytrewqp/goap-editor/utils"
 
-type Belief struct {
+type Location struct {
 	Id   int
 	Name string
 }
 
-func NewBelief(name string) *Belief {
-	return &Belief{
+func NewLocation(name string) *Location {
+	return &Location{
 		Id:   utils.GetId(),
 		Name: name,
 	}

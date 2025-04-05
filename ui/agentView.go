@@ -11,18 +11,20 @@ import (
 
 type AgentView struct {
 	theme          *material.Theme
+	data           *goap.Goap
 	agent          *goap.Agent
 	beliefButtons  *[]BeliefButton
 	SelectedBelief int
 	goalButtons    *[]GoalButton
-	SelectedGoal   *goap.Goal
+	SelectedGoal   int
 	actionButtons  *[]ActionButton
-	SelectedAction *goap.Action
+	SelectedAction int
 }
 
-func NewAgentView(theme *material.Theme) *AgentView {
+func NewAgentView(theme *material.Theme, data *goap.Goap) *AgentView {
 	return &AgentView{
 		theme: theme,
+		data:  data,
 	}
 }
 
@@ -36,10 +38,8 @@ func (agentView *AgentView) Layout(context layout.Context) layout.Dimensions {
 			agentView.beliefButtons = &[]BeliefButton{}
 		} else {
 			beliefButtons := make([]BeliefButton, len(agentView.agent.Beliefs))
-			i := 0
-			for belief, value := range agentView.agent.Beliefs {
-				beliefButtons[i] = *NewBeliefButton(agentView.theme, belief, value)
-				i++
+			for i, belief := range agentView.agent.Beliefs {
+				beliefButtons[i] = *NewBeliefButton(agentView.theme, agentView.data.Beliefs[belief])
 			}
 
 			agentView.beliefButtons = &beliefButtons
@@ -50,7 +50,7 @@ func (agentView *AgentView) Layout(context layout.Context) layout.Dimensions {
 		} else {
 			goalButtons := make([]GoalButton, len(agentView.agent.Goals))
 			for i, goal := range agentView.agent.Goals {
-				goalButtons[i] = *NewGoalButton(agentView.theme, &goal)
+				goalButtons[i] = *NewGoalButton(agentView.theme, agentView.data.Goals[goal])
 			}
 
 			agentView.goalButtons = &goalButtons
@@ -61,28 +61,28 @@ func (agentView *AgentView) Layout(context layout.Context) layout.Dimensions {
 		} else {
 			actionButtons := make([]ActionButton, len(agentView.agent.Actions))
 			for i, action := range agentView.agent.Actions {
-				actionButtons[i] = *NewActionButton(agentView.theme, &action)
+				actionButtons[i] = *NewActionButton(agentView.theme, agentView.data.Actions[action])
 			}
 
 			agentView.actionButtons = &actionButtons
 		}
 	}
 
-	for i, beliefButton := range *agentView.beliefButtons {
+	for _, beliefButton := range *agentView.beliefButtons {
 		if beliefButton.Clicked {
-			agentView.SelectedBelief = i
+			agentView.SelectedBelief = beliefButton.GetId()
 		}
 	}
 
-	for i, goalButton := range *agentView.goalButtons {
+	for _, goalButton := range *agentView.goalButtons {
 		if goalButton.Clicked {
-			agentView.SelectedGoal = &agentView.agent.Goals[i]
+			agentView.SelectedGoal = goalButton.GetId()
 		}
 	}
 
-	for i, actionButton := range *agentView.actionButtons {
+	for _, actionButton := range *agentView.actionButtons {
 		if actionButton.Clicked {
-			agentView.SelectedAction = &agentView.agent.Actions[i]
+			agentView.SelectedAction = actionButton.GetId()
 		}
 	}
 
@@ -122,9 +122,15 @@ func (agentView *AgentView) Layout(context layout.Context) layout.Dimensions {
 	}.Layout(context, agentLayouts...)
 }
 
-func (agentView *AgentView) SetAgent(agent *goap.Agent) {
-	if agentView.agent != agent {
-		agentView.agent = agent
+func (agentView *AgentView) SetAgent(id int) {
+	if id == 0 {
+		return
+	}
+
+	newAgent := agentView.data.Agents[id]
+
+	if agentView.agent == nil || agentView.agent.Id != newAgent.Id {
+		agentView.agent = &newAgent
 		agentView.beliefButtons = nil
 		agentView.goalButtons = nil
 		agentView.actionButtons = nil

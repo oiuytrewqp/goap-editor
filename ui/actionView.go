@@ -11,14 +11,16 @@ import (
 
 type ActionView struct {
 	theme                *material.Theme
+	data                 *goap.Goap
 	action               *goap.Action
 	prerequisitesButtons *[]StateButton
 	outcomesButtons      *[]StateButton
 }
 
-func NewActionView(theme *material.Theme) *ActionView {
+func NewActionView(theme *material.Theme, data *goap.Goap) *ActionView {
 	return &ActionView{
 		theme: theme,
+		data:  data,
 	}
 }
 
@@ -35,7 +37,7 @@ func (actionView *ActionView) Layout(context layout.Context) layout.Dimensions {
 			prerequisitesButtons := make([]StateButton, len(actionView.action.Prerequisites))
 			i := 0
 			for prerequisite, value := range actionView.action.Prerequisites {
-				prerequisitesButtons[i] = *NewStateButton(actionView.theme, prerequisite, value)
+				prerequisitesButtons[i] = *NewStateButton(actionView.theme, actionView.data.Beliefs[prerequisite], value)
 				i++
 			}
 
@@ -48,7 +50,7 @@ func (actionView *ActionView) Layout(context layout.Context) layout.Dimensions {
 			outcomesButtons := make([]StateButton, len(actionView.action.Outcomes))
 			i := 0
 			for outcome, value := range actionView.action.Outcomes {
-				outcomesButtons[i] = *NewStateButton(actionView.theme, outcome, value)
+				outcomesButtons[i] = *NewStateButton(actionView.theme, actionView.data.Beliefs[outcome], value)
 				i++
 			}
 
@@ -84,9 +86,15 @@ func (actionView *ActionView) Layout(context layout.Context) layout.Dimensions {
 	}.Layout(context, actionLayouts...)
 }
 
-func (actionView *ActionView) SetAction(action *goap.Action) {
-	if actionView.action != action {
-		actionView.action = action
+func (actionView *ActionView) SetAction(id int) {
+	if id == 0 {
+		return
+	}
+
+	newAction := actionView.data.Actions[id]
+
+	if actionView.action == nil || actionView.action.Id != newAction.Id {
+		actionView.action = &newAction
 		actionView.prerequisitesButtons = nil
 		actionView.outcomesButtons = nil
 	}

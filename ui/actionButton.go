@@ -15,10 +15,10 @@ type ActionButton struct {
 	Clicked bool
 }
 
-func NewActionButton(theme *material.Theme, action *goap.Action) *ActionButton {
+func NewActionButton(theme *material.Theme, action goap.Action) *ActionButton {
 	return &ActionButton{
 		theme:   *theme,
-		action:  *action,
+		action:  action,
 		Clicked: false,
 	}
 }
@@ -27,4 +27,8 @@ func (actionButton *ActionButton) Layout(context layout.Context) layout.Dimensio
 	actionButton.Clicked = actionButton.button.Clicked(context)
 
 	return material.Button(&actionButton.theme, &actionButton.button, actionButton.action.Name).Layout(context)
+}
+
+func (actionButton *ActionButton) GetId() int {
+	return actionButton.action.Id
 }
