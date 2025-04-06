@@ -11,6 +11,15 @@ TODO:
 roll the buttons into one
 add delete to the button
 maybe make the button remove items when the delete is clicked
+look at drag and drop for ease
+
+
+
+dropdown:
+button
+list of selection buttons
+state for buttons
+
 
 
 Have the world and agents.
@@ -68,6 +77,16 @@ This will allow agents to use the generated json to make plans and exec them
 Program structure:
 goap structures:
 Action, world, agent
+
+sections of the view:
+1. Components:creat and view items as a list - shows everything available
+2. Assemble: assemble a world from the items
+3. Test: test out the system
+
+currently working on 2.
+create tabs at the top for each one
+could this be too restrictive?
+need a way to assemble but also know all available
 
 
 layout:

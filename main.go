@@ -45,7 +45,7 @@ func run(window *app.Window) error {
 	theme = material.NewTheme()
 	var ops op.Ops
 
-	views := ui.NewViews(theme, &goapData)
+	mainView := ui.NewMainView(theme, &goapData)
 
 	for {
 		switch e := window.Event().(type) {
@@ -54,7 +54,7 @@ func run(window *app.Window) error {
 		case app.FrameEvent:
 			context = app.NewContext(&ops, e)
 
-			views.Layout(context)
+			mainView.Layout(context)
 
 			e.Frame(context.Ops)
 		}
