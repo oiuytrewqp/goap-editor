@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"oiuytrewqp/goap-server/server/routes"
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
@@ -11,6 +12,8 @@ func main() {
 	router := gin.Default()
 
 	router.Use(static.Serve("/", static.LocalFile("./client/dist", true)))
+
+	routes.InitialiseRoutes(router)
 
 	api := router.Group("/api")
 	{
