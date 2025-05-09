@@ -130,7 +130,7 @@ const AgentForm: React.FC<AgentFormProps> = ({
 
         <MultiSelect
           label="Beliefs"
-          options={beliefs.map(belief => ({ id: belief.id, name: belief.key }))}
+          options={beliefs.map(belief => ({ id: belief.id, name: belief.name }))}
           selectedIds={selectedBeliefIds}
           onChange={setSelectedBeliefIds}
         />

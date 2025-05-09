@@ -52,14 +52,14 @@ func createGoal(context *gin.Context) {
 	var goal models.Goal
 	context.ShouldBindJSON(&goal)
 
-	err := models.CreateGoal(goal)
+	id, err := models.CreateGoal(goal)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving goal."})
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{})
+	context.JSON(http.StatusOK, gin.H{"id": id})
 }
 
 func updateGoal(context *gin.Context) {

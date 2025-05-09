@@ -1,14 +1,14 @@
 package models
 
 type Action struct {
-	ID       int64
-	Name     string `binding:"required"`
-	Function string
-	Location int64
+	ID       int64  `json:"id"`
+	Name     string `json:"name" binding:"required"`
+	Function string `json:"function"`
+	Location int64  `json:"location"`
 }
 
 func GetActions() ([]Action, error) {
-	rows, err := database.Query("SELECT * FROM actions")
+	rows, err := Database.Query("SELECT * FROM actions")
 
 	if err != nil {
 		return nil, err
@@ -25,14 +25,13 @@ func GetActions() ([]Action, error) {
 }
 
 func GetAction(id int) (Action, error) {
-	rows, err := database.Query("SELECT * FROM actions WHERE id = ?", id)
+	rows, err := Database.Query("SELECT * FROM actions WHERE id = ?", id)
 
 	if err != nil {
 		return Action{}, err
 	}
 
 	var action Action
-
 	err = rows.Scan(&action.ID, &action.Name, &action.Function, &action.Location)
 
 	if err != nil {
@@ -43,7 +42,7 @@ func GetAction(id int) (Action, error) {
 }
 
 func CreateAction(action Action) (int64, error) {
-	result, err := database.Exec("INSERT INTO actions (name, function, location) VALUES (?, ?, ?)", action.Name, action.Function, action.Location)
+	result, err := Database.Exec("INSERT INTO actions (name, function, location) VALUES (?, ?, ?)", action.Name, action.Function, action.Location)
 
 	if err != nil {
 		return 0, err
@@ -55,9 +54,21 @@ func CreateAction(action Action) (int64, error) {
 }
 
 func UpdateAction(id int, action Action) error {
+	_, err := Database.Exec("UPDATE actions SET name = ?, function = ?, location = ? WHERE id = ?", action.Name, action.Function, action.Location, id)
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func DeleteAction(id int) error {
+	_, err := Database.Exec("DELETE FROM actions WHERE id = ?", id)
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

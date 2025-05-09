@@ -1,0 +1,4 @@
+PUT http://localhost:8080/api/beliefs/1 HTTP/1.1
+content-type: application/json
+
+{"name": "test50", "value": 50, "description": "t"}

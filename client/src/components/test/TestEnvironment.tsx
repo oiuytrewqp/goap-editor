@@ -119,7 +119,7 @@ const TestEnvironment: React.FC = () => {
                                         key={belief.id} 
                                         className="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded"
                                       >
-                                        {belief.key}: {String(belief.value)}
+                                        {belief.name}: {String(belief.value)}
                                       </span>
                                     ))}
                                   </div>

@@ -49,7 +49,7 @@ const BeliefManager: React.FC = () => {
     : null;
 
   const beliefItems = Array.isArray(beliefs) 
-    ? beliefs.map(b => ({ id: b.id, name: b.key }))
+    ? beliefs.map(b => ({ id: b.id, name: b.name }))
     : [];
 
   return (

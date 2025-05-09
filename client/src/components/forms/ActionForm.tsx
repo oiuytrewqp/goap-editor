@@ -132,14 +132,14 @@ const ActionForm: React.FC<ActionFormProps> = ({
 
         <MultiSelect
           label="Prerequisites (Beliefs required to perform this action)"
-          options={beliefs.map(belief => ({ id: belief.id, name: belief.key }))}
+          options={beliefs.map(belief => ({ id: belief.id, name: belief.name }))}
           selectedIds={prerequisiteIds}
           onChange={setPrerequisiteIds}
         />
 
         <MultiSelect
           label="Outcomes (Beliefs resulting from this action)"
-          options={beliefs.map(belief => ({ id: belief.id, name: belief.key }))}
+          options={beliefs.map(belief => ({ id: belief.id, name: belief.name }))}
           selectedIds={outcomeIds}
           onChange={setOutcomeIds}
         />

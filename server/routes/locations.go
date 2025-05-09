@@ -52,14 +52,14 @@ func createLocation(context *gin.Context) {
 	var location models.Location
 	context.ShouldBindJSON(&location)
 
-	err := models.CreateLocation(location)
+	id, err := models.CreateLocation(location)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving location."})
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{})
+	context.JSON(http.StatusOK, gin.H{"id": id})
 }
 
 func updateLocation(context *gin.Context) {

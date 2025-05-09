@@ -52,14 +52,14 @@ func createBelief(context *gin.Context) {
 	var belief models.Belief
 	context.ShouldBindJSON(&belief)
 
-	err := models.CreateBelief(belief)
+	id, err := models.CreateBelief(belief)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving belief."})
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{})
+	context.JSON(http.StatusOK, gin.H{"id": id})
 }
 
 func updateBelief(context *gin.Context) {

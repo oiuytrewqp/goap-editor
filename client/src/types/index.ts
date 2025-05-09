@@ -1,40 +1,40 @@
 export interface Agent {
-  id: string;
+  id: number;
   name: string;
   description: string;
-  locationId: string;
-  beliefs: string[]; // IDs of beliefs
-  goals: string[]; // IDs of goals in priority order
-  actions: string[]; // IDs of actions
+  locationId: number;
+  beliefs: number[]; // IDs of beliefs
+  goals: number[]; // IDs of goals in priority order
+  actions: number[]; // IDs of actions
 }
 
 export interface Belief {
-  id: string;
-  key: string;
+  id: number;
+  name: string;
   value: any;
   description: string;
 }
 
 export interface Goal {
-  id: string;
+  id: number;
   name: string;
   description: string;
-  beliefs: string[]; // IDs of beliefs
+  beliefs: number[]; // IDs of beliefs
   priority: number;
 }
 
 export interface Action {
-  id: string;
+  id: number;
   name: string;
   description: string;
   methodName: string;
-  locationId: string | null;
-  prerequisites: string[]; // IDs of beliefs
-  outcomes: string[]; // IDs of beliefs
+  locationId: number | null;
+  prerequisites: number[]; // IDs of beliefs
+  outcomes: number[]; // IDs of beliefs
 }
 
 export interface Location {
-  id: string;
+  id: number;
   name: string;
   description: string;
 }

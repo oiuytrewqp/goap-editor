@@ -107,7 +107,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
 
         <MultiSelect
           label="Beliefs (required to satisfy this goal)"
-          options={beliefs.map(belief => ({ id: belief.id, name: belief.key }))}
+          options={beliefs.map(belief => ({ id: belief.id, name: belief.name }))}
           selectedIds={selectedBeliefIds}
           onChange={setSelectedBeliefIds}
         />

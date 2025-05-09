@@ -1,29 +1,72 @@
 package models
 
-import "database/sql"
-
 type Agent struct {
-	ID   int64
-	Name string `binding:"required"`
+	ID   int64  `json:"id"`
+	Name string `json:"name" binding:"required"`
 }
 
 func GetAgents() ([]Agent, error) {
-	sql.Open("sqlite3", "./database")
-	return []Agent{}, nil
+	rows, err := Database.Query("SELECT * FROM agents")
+
+	if err != nil {
+		return nil, err
+	}
+
+	var agents []Agent
+	for rows.Next() {
+		var agent Agent
+		rows.Scan(&agent.ID, &agent.Name)
+		agents = append(agents, agent)
+	}
+
+	return agents, nil
 }
 
 func GetAgent(id int) (Agent, error) {
-	return Agent{}, nil
+	rows, err := Database.Query("SELECT * FROM agents WHERE id = ?", id)
+
+	if err != nil {
+		return Agent{}, err
+	}
+
+	var agent Agent
+	err = rows.Scan(&agent.ID, &agent.Name)
+
+	if err != nil {
+		return Agent{}, err
+	}
+
+	return agent, nil
 }
 
-func CreateAgent(agent Agent) error {
-	return nil
+func CreateAgent(agent Agent) (int64, error) {
+	result, err := Database.Exec("INSERT INTO agents (name) VALUES (?)", agent.Name)
+
+	if err != nil {
+		return 0, err
+	}
+
+	id, _ := result.LastInsertId()
+
+	return id, nil
 }
 
 func UpdateAgent(id int, agent Agent) error {
+	_, err := Database.Exec("UPDATE agents SET name = ? WHERE id = ?", agent.Name, id)
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func DeleteAgent(id int) error {
+	_, err := Database.Exec("DELETE FROM agents WHERE id = ?", id)
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

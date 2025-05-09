@@ -16,14 +16,14 @@ const BeliefForm: React.FC<BeliefFormProps> = ({
   onDelete,
   isNew,
 }) => {
-  const [key, setKey] = useState('');
+  const [name, setName] = useState('');
   const [value, setValue] = useState<any>('');
   const [valueType, setValueType] = useState<'string' | 'number' | 'boolean'>('string');
   const [description, setDescription] = useState('');
   
   useEffect(() => {
     if (belief) {
-      setKey(belief.key);
+      setName(belief.name);
       
       // Determine value type and set accordingly
       if (typeof belief.value === 'boolean') {
@@ -40,9 +40,9 @@ const BeliefForm: React.FC<BeliefFormProps> = ({
       setDescription(belief.description);
     } else {
       // Default values for new belief
-      setKey('');
+      setName('');
       setValue('');
-      setValueType('string');
+      setValueType('number');
       setDescription('');
     }
   }, [belief]);
@@ -61,7 +61,7 @@ const BeliefForm: React.FC<BeliefFormProps> = ({
     }
     
     const updatedBelief = {
-      key,
+      name,
       value: typedValue,
       description,
     };
@@ -92,14 +92,14 @@ const BeliefForm: React.FC<BeliefFormProps> = ({
       
       <div className="flex-1 overflow-y-auto p-6">
         <div className="mb-4">
-          <label htmlFor="key" className="block text-sm font-medium text-gray-200 mb-1">
-            Key
+          <label htmlFor="name" className="block text-sm font-medium text-gray-200 mb-1">
+            Name
           </label>
           <input
             type="text"
-            id="key"
-            value={key}
-            onChange={(e) => setKey(e.target.value)}
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="w-full bg-gray-700 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             required
           />
@@ -115,6 +115,7 @@ const BeliefForm: React.FC<BeliefFormProps> = ({
                 type="radio"
                 className="text-indigo-600"
                 checked={valueType === 'string'}
+                disabled
                 onChange={() => handleValueTypeChange('string')}
               />
               <span className="ml-2">String</span>
@@ -133,6 +134,7 @@ const BeliefForm: React.FC<BeliefFormProps> = ({
                 type="radio"
                 className="text-indigo-600"
                 checked={valueType === 'boolean'}
+                disabled
                 onChange={() => handleValueTypeChange('boolean')}
               />
               <span className="ml-2">Boolean</span>

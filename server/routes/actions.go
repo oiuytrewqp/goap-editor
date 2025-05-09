@@ -52,14 +52,14 @@ func createAction(context *gin.Context) {
 	var action models.Action
 	context.ShouldBindJSON(&action)
 
-	err := models.CreateAction(action)
+	id, err := models.CreateAction(action)
 
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving action."})
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving action.", "err": err.Error()})
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{})
+	context.JSON(http.StatusOK, gin.H{"id": id})
 }
 
 func updateAction(context *gin.Context) {

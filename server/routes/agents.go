@@ -51,14 +51,14 @@ func createAgent(context *gin.Context) {
 	var agent models.Agent
 	context.ShouldBindJSON(&agent)
 
-	err := models.CreateAgent(agent)
+	id, err := models.CreateAgent(agent)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving agent."})
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{})
+	context.JSON(http.StatusOK, gin.H{"id": id})
 }
 
 func updateAgent(context *gin.Context) {
