@@ -5,8 +5,8 @@ type ActionPrerequisite struct {
 	PrerequisiteID int64 `json:"prerequisite" binding:"required"`
 }
 
-func GetActionPrerequisites(action_id int64) ([]int64, error) {
-	rows, err := Database.Query("SELECT action_id FROM action_prerequisites WHERE action_id = ?", action_id)
+func GetActionPrerequisites(actionId int64) ([]int64, error) {
+	rows, err := Database.Query("SELECT belief_id FROM action_prerequisites WHERE action_id = ?", actionId)
 
 	if err != nil {
 		return nil, err
@@ -34,8 +34,8 @@ func AddActionPrerequisites(actionPrerequisites []ActionPrerequisite) error {
 	return nil
 }
 
-func RemoveActionPrerequisites(action_id int64) error {
-	_, err := Database.Exec("DELETE FROM action_prerequisites WHERE action_id = ?", action_id)
+func RemoveActionPrerequisites(actionId int64) error {
+	_, err := Database.Exec("DELETE FROM action_prerequisites WHERE action_id = ?", actionId)
 
 	if err != nil {
 		return err

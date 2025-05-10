@@ -46,6 +46,9 @@ YES! I really like Go and possibly should have looked into it sooner.
 ## Will you use Go in all future server applications?
 Maybe. I will look at using tech as needed.
 
+## Will you make libraries that can use the generated GOAP JSON file in other applications?
+Yes, I aim to create a Godot library first and might look at others at a later stage.
+
 ## Why did you choose React and Typescript for the front end?
 I didnt. AI chose that on my behalf. As Go, and hence the service, was the part of the application that I wanted to gain experience on I let AI generate the front end.
 
@@ -81,3 +84,12 @@ Look at moving the error message string into a dictionary that can centrally be 
 
 ## Location Reference
 The location in action and agent is not 'referenced' to the locations table. As part of data base atomicity this can be improved.
+
+## Junction Tables
+All the junction tables can be simplified and combined.
+
+## Add Test Environment
+At the moment the test envirtonment doesnt work.
+
+## Add JSON Export
+Add functionality to export the GOAP setup as one JSON file for use in other applications.

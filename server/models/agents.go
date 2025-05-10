@@ -1,9 +1,13 @@
 package models
 
 type Agent struct {
-	ID          int64  `json:"id"`
-	Name        string `json:"name" binding:"required"`
-	Description string `json:"description"`
+	ID          int64   `json:"id"`
+	Name        string  `json:"name" binding:"required"`
+	LocationID  int64   `json:"locationId"`
+	Beliefs     []int64 `json:"beliefs" binding:"required"`
+	Actions     []int64 `json:"actions" binding:"required"`
+	Goals       []int64 `json:"goals" binding:"required"`
+	Description string  `json:"description"`
 }
 
 func GetAgents() ([]Agent, error) {
@@ -16,7 +20,7 @@ func GetAgents() ([]Agent, error) {
 	var agents []Agent
 	for rows.Next() {
 		var agent Agent
-		rows.Scan(&agent.ID, &agent.Name, &agent.Description)
+		rows.Scan(&agent.ID, &agent.Name, &agent.LocationID, &agent.Description)
 		agents = append(agents, agent)
 	}
 
@@ -31,7 +35,7 @@ func GetAgent(id int) (Agent, error) {
 	}
 
 	var agent Agent
-	err = rows.Scan(&agent.ID, &agent.Name, &agent.Description)
+	err = rows.Scan(&agent.ID, &agent.Name, &agent.LocationID, &agent.Description)
 
 	if err != nil {
 		return Agent{}, err
@@ -41,7 +45,7 @@ func GetAgent(id int) (Agent, error) {
 }
 
 func CreateAgent(agent Agent) (int64, error) {
-	result, err := Database.Exec("INSERT INTO agents (name, description) VALUES (?, ?)", agent.Name, agent.Description)
+	result, err := Database.Exec("INSERT INTO agents (name, location, description) VALUES (?, ?, ?)", agent.Name, agent.LocationID, agent.Description)
 
 	if err != nil {
 		return 0, err
@@ -53,7 +57,7 @@ func CreateAgent(agent Agent) (int64, error) {
 }
 
 func UpdateAgent(id int, agent Agent) error {
-	_, err := Database.Exec("UPDATE agents SET name = ?, description = ? WHERE id = ?", agent.Name, agent.Description, id)
+	_, err := Database.Exec("UPDATE agents SET name = ?, location = ?, description = ? WHERE id = ?", agent.Name, agent.LocationID, agent.Description, id)
 
 	if err != nil {
 		return err

@@ -5,8 +5,8 @@ type GoalBelief struct {
 	BeliefID int64 `json:"belief" binding:"required"`
 }
 
-func GetGoalBeliefs(goal_id int64) ([]int64, error) {
-	rows, err := Database.Query("SELECT belief_id FROM goal_beliefs WHERE goal_id = ?", goal_id)
+func GetGoalBeliefs(goalId int64) ([]int64, error) {
+	rows, err := Database.Query("SELECT belief_id FROM goal_beliefs WHERE goal_id = ?", goalId)
 
 	if err != nil {
 		return nil, err
@@ -34,8 +34,8 @@ func AddGoalBeliefs(goalBeliefs []GoalBelief) error {
 	return nil
 }
 
-func RemoveGoalBeliefs(goal_id int64) error {
-	_, err := Database.Exec("DELETE FROM goal_beliefs WHERE goal_id = ?", goal_id)
+func RemoveGoalBeliefs(goalId int64) error {
+	_, err := Database.Exec("DELETE FROM goal_beliefs WHERE goal_id = ?", goalId)
 
 	if err != nil {
 		return err
