@@ -83,7 +83,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
             </div>
             <ul className="max-h-60 overflow-y-auto py-1">
               {filteredOptions.map((option) => {
-                const isSelected = selectedIds.includes(option.id);
+                const isSelected = !!(selectedIds?.includes(option.id));
                 return (
                   <li key={option.id}>
                     <button

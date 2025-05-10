@@ -23,7 +23,7 @@ const AgentForm: React.FC<AgentFormProps> = ({
   
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [selectedLocationId, setSelectedLocationId] = useState<string>('');
+  const [selectedLocationId, setSelectedLocationId] = useState<number>(0);
   const [selectedBeliefIds, setSelectedBeliefIds] = useState<string[]>([]);
   const [selectedGoalIds, setSelectedGoalIds] = useState<string[]>([]);
   const [selectedActionIds, setSelectedActionIds] = useState<string[]>([]);
@@ -40,7 +40,7 @@ const AgentForm: React.FC<AgentFormProps> = ({
       // Default values for new agent
       setName('');
       setDescription('');
-      setSelectedLocationId(locations.length > 0 ? locations[0].id : '');
+      setSelectedLocationId(locations.length > 0 ? locations[0].id : 0);
       setSelectedBeliefIds([]);
       setSelectedGoalIds([]);
       setSelectedActionIds([]);
@@ -113,7 +113,7 @@ const AgentForm: React.FC<AgentFormProps> = ({
           <select
             id="location"
             value={selectedLocationId}
-            onChange={(e) => setSelectedLocationId(e.target.value)}
+            onChange={(e) => setSelectedLocationId(parseInt(e.target.value))}
             className="w-full bg-gray-700 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             required
           >

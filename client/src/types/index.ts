@@ -27,8 +27,8 @@ export interface Action {
   id: number;
   name: string;
   description: string;
-  methodName: string;
-  locationId: number | null;
+  method: string;
+  locationId: number;
   prerequisites: number[]; // IDs of beliefs
   outcomes: number[]; // IDs of beliefs
 }

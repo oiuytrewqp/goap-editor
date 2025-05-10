@@ -27,6 +27,10 @@ func getBeliefs(context *gin.Context) {
 		return
 	}
 
+	if allBelliefs == nil {
+		allBelliefs = []models.Belief{}
+	}
+
 	context.JSON(http.StatusOK, allBelliefs)
 }
 

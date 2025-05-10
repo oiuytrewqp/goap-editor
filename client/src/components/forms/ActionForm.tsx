@@ -22,8 +22,8 @@ const ActionForm: React.FC<ActionFormProps> = ({
   
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [methodName, setMethodName] = useState('');
-  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
+  const [method, setMethod] = useState('');
+  const [selectedLocationId, setSelectedLocationId] = useState<number>(0);
   const [prerequisiteIds, setPrerequisiteIds] = useState<string[]>([]);
   const [outcomeIds, setOutcomeIds] = useState<string[]>([]);
   
@@ -31,7 +31,7 @@ const ActionForm: React.FC<ActionFormProps> = ({
     if (action) {
       setName(action.name);
       setDescription(action.description);
-      setMethodName(action.methodName);
+      setMethod(action.method);
       setSelectedLocationId(action.locationId);
       setPrerequisiteIds(action.prerequisites);
       setOutcomeIds(action.outcomes);
@@ -39,8 +39,8 @@ const ActionForm: React.FC<ActionFormProps> = ({
       // Default values for new action
       setName('');
       setDescription('');
-      setMethodName('');
-      setSelectedLocationId(null);
+      setMethod('');
+      setSelectedLocationId(0);
       setPrerequisiteIds([]);
       setOutcomeIds([]);
     }
@@ -52,7 +52,7 @@ const ActionForm: React.FC<ActionFormProps> = ({
     const updatedAction = {
       name,
       description,
-      methodName,
+      method,
       locationId: selectedLocationId,
       prerequisites: prerequisiteIds,
       outcomes: outcomeIds,
@@ -98,14 +98,14 @@ const ActionForm: React.FC<ActionFormProps> = ({
         </div>
 
         <div className="mb-4">
-          <label htmlFor="methodName" className="block text-sm font-medium text-gray-200 mb-1">
+          <label htmlFor="method" className="block text-sm font-medium text-gray-200 mb-1">
             Method Name
           </label>
           <input
             type="text"
-            id="methodName"
-            value={methodName}
-            onChange={(e) => setMethodName(e.target.value)}
+            id="method"
+            value={method}
+            onChange={(e) => setMethod(e.target.value)}
             className="w-full bg-gray-700 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             placeholder="e.g., moveToLocation, pickUpItem"
           />
@@ -118,7 +118,7 @@ const ActionForm: React.FC<ActionFormProps> = ({
           <select
             id="location"
             value={selectedLocationId || ''}
-            onChange={(e) => setSelectedLocationId(e.target.value || null)}
+            onChange={(e) => setSelectedLocationId(parseInt(e.target.value) || 0)}
             className="w-full bg-gray-700 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             <option value="">None (No location required)</option>

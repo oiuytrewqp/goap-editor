@@ -1,9 +1,10 @@
 package models
 
 type Belief struct {
-	ID    int64  `json:"id"`
-	Name  string `json:"name" binding:"required"`
-	Value int64  `json:"value"`
+	ID          int64  `json:"id"`
+	Name        string `json:"name" binding:"required"`
+	Value       int64  `json:"value" binding:"required"`
+	Description string `json:"description"`
 }
 
 func GetBeliefs() ([]Belief, error) {
@@ -16,7 +17,7 @@ func GetBeliefs() ([]Belief, error) {
 	var beliefs []Belief
 	for rows.Next() {
 		var belief Belief
-		rows.Scan(&belief.ID, &belief.Name, &belief.Value)
+		rows.Scan(&belief.ID, &belief.Name, &belief.Value, &belief.Description)
 		beliefs = append(beliefs, belief)
 	}
 
@@ -31,7 +32,7 @@ func GetBelief(id int) (Belief, error) {
 	}
 
 	var belief Belief
-	err = rows.Scan(&belief.ID, &belief.Name, &belief.Value)
+	err = rows.Scan(&belief.ID, &belief.Name, &belief.Value, &belief.Description)
 
 	if err != nil {
 		return Belief{}, err
@@ -41,7 +42,7 @@ func GetBelief(id int) (Belief, error) {
 }
 
 func CreateBelief(belief Belief) (int64, error) {
-	result, err := Database.Exec("INSERT INTO beliefs (name, amount) VALUES (?, ?)", belief.Name, belief.Value)
+	result, err := Database.Exec("INSERT INTO beliefs (name, value, description) VALUES (?, ?, ?)", belief.Name, belief.Value, belief.Description)
 
 	if err != nil {
 		return 0, err
@@ -53,7 +54,7 @@ func CreateBelief(belief Belief) (int64, error) {
 }
 
 func UpdateBelief(id int, belief Belief) error {
-	_, err := Database.Exec("UPDATE beliefs SET name = ?, amount = ? WHERE id = ?", belief.Name, belief.Value, id)
+	_, err := Database.Exec("UPDATE beliefs SET name = ?, value = ?, description WHERE id = ?", belief.Name, belief.Value, belief.Description, id)
 
 	if err != nil {
 		return err

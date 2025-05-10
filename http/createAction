@@ -1,6 +1,4 @@
 POST http://localhost:8080/api/actions HTTP/1.1
 content-type: application/json
 
-{
-    "name": "test"
-}
+{"name":"Action1","description":"a","method":"testm","locationId":1,"prerequisites":[1],"outcomes":[2]}

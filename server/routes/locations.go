@@ -27,6 +27,10 @@ func getLocations(context *gin.Context) {
 		return
 	}
 
+	if allLocations == nil {
+		allLocations = []models.Location{}
+	}
+
 	context.JSON(http.StatusOK, allLocations)
 }
 

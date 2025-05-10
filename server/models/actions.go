@@ -1,10 +1,13 @@
 package models
 
 type Action struct {
-	ID       int64  `json:"id"`
-	Name     string `json:"name" binding:"required"`
-	Function string `json:"function"`
-	Location int64  `json:"location"`
+	ID            int64   `json:"id"`
+	Name          string  `json:"name" binding:"required"`
+	Method        string  `json:"method"`
+	LocationID    int64   `json:"locationId"`
+	Prerequisites []int64 `json:"prerequisites"`
+	Outcomes      []int64 `json:"outcomes"`
+	Description   string  `json:"description"`
 }
 
 func GetActions() ([]Action, error) {
@@ -17,7 +20,7 @@ func GetActions() ([]Action, error) {
 	var actions []Action
 	for rows.Next() {
 		var action Action
-		rows.Scan(&action.ID, &action.Name, &action.Function, &action.Location)
+		rows.Scan(&action.ID, &action.Name, &action.Method, &action.LocationID, &action.Description)
 		actions = append(actions, action)
 	}
 
@@ -32,7 +35,7 @@ func GetAction(id int) (Action, error) {
 	}
 
 	var action Action
-	err = rows.Scan(&action.ID, &action.Name, &action.Function, &action.Location)
+	err = rows.Scan(&action.ID, &action.Name, &action.Method, &action.LocationID, &action.Description)
 
 	if err != nil {
 		return Action{}, err
@@ -42,7 +45,7 @@ func GetAction(id int) (Action, error) {
 }
 
 func CreateAction(action Action) (int64, error) {
-	result, err := Database.Exec("INSERT INTO actions (name, function, location) VALUES (?, ?, ?)", action.Name, action.Function, action.Location)
+	result, err := Database.Exec("INSERT INTO actions (name, method, location, description) VALUES (?, ?, ?, ?)", action.Name, action.Method, action.LocationID, action.Description)
 
 	if err != nil {
 		return 0, err
@@ -54,7 +57,7 @@ func CreateAction(action Action) (int64, error) {
 }
 
 func UpdateAction(id int, action Action) error {
-	_, err := Database.Exec("UPDATE actions SET name = ?, function = ?, location = ? WHERE id = ?", action.Name, action.Function, action.Location, id)
+	_, err := Database.Exec("UPDATE actions SET name = ?, method = ?, location = ?, description = ? WHERE id = ?", action.Name, action.Method, action.LocationID, action.Description, id)
 
 	if err != nil {
 		return err

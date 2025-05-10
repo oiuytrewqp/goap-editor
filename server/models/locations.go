@@ -1,8 +1,9 @@
 package models
 
 type Location struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name" binding:"required"`
+	ID          int64  `json:"id"`
+	Name        string `json:"name" binding:"required"`
+	Description string `json:"description"`
 }
 
 func GetLocations() ([]Location, error) {
@@ -15,7 +16,7 @@ func GetLocations() ([]Location, error) {
 	var locations []Location
 	for rows.Next() {
 		var location Location
-		rows.Scan(&location.ID, &location.Name)
+		rows.Scan(&location.ID, &location.Name, &location.Description)
 		locations = append(locations, location)
 	}
 
@@ -30,7 +31,7 @@ func GetLocation(id int) (Location, error) {
 	}
 
 	var location Location
-	err = rows.Scan(&location.ID, &location.Name)
+	err = rows.Scan(&location.ID, &location.Name, &location.Description)
 
 	if err != nil {
 		return Location{}, err
@@ -40,7 +41,7 @@ func GetLocation(id int) (Location, error) {
 }
 
 func CreateLocation(location Location) (int64, error) {
-	result, err := Database.Exec("INSERT INTO locations (name) VALUES (?)", location.Name)
+	result, err := Database.Exec("INSERT INTO locations (name, description) VALUES (?, ?)", location.Name, location.Description)
 
 	if err != nil {
 		return 0, err
@@ -52,7 +53,7 @@ func CreateLocation(location Location) (int64, error) {
 }
 
 func UpdateLocation(id int, location Location) error {
-	_, err := Database.Exec("UPDATE locations SET name = ? WHERE id = ?", location.Name, id)
+	_, err := Database.Exec("UPDATE locations SET name = ?, description = ? WHERE id = ?", location.Name, location.Description, id)
 
 	if err != nil {
 		return err

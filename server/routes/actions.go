@@ -27,6 +27,38 @@ func getActions(context *gin.Context) {
 		return
 	}
 
+	for i, action := range allActions {
+		actionPrerequisites, err := models.GetActionPrerequisites(action.ID)
+
+		if err != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{"message": "Error getting action prerequisites.", "error": err.Error(), "id": action.ID})
+			return
+		}
+
+		if actionPrerequisites == nil {
+			actionPrerequisites = []int64{}
+		}
+
+		allActions[i].Prerequisites = actionPrerequisites
+
+		actionOutcomes, err := models.GetActionOutcomes(action.ID)
+
+		if err != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{"message": "Error getting action outcomes.", "error": err.Error(), "id": action.ID})
+			return
+		}
+
+		if actionOutcomes == nil {
+			actionOutcomes = []int64{}
+		}
+
+		allActions[i].Outcomes = actionOutcomes
+	}
+
+	if allActions == nil {
+		allActions = []models.Action{}
+	}
+
 	context.JSON(http.StatusOK, allActions)
 }
 
@@ -45,6 +77,32 @@ func getAction(context *gin.Context) {
 		return
 	}
 
+	actionPrerequisites, err := models.GetActionPrerequisites(action.ID)
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error getting action prerequisites.", "error": err.Error(), "id": action.ID})
+		return
+	}
+
+	if actionPrerequisites == nil {
+		actionPrerequisites = []int64{}
+	}
+
+	action.Prerequisites = actionPrerequisites
+
+	actionOutcomes, err := models.GetActionOutcomes(action.ID)
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error getting action outcomes.", "error": err.Error(), "id": action.ID})
+		return
+	}
+
+	if actionOutcomes == nil {
+		actionOutcomes = []int64{}
+	}
+
+	action.Outcomes = actionOutcomes
+
 	context.JSON(http.StatusOK, action)
 }
 
@@ -55,7 +113,31 @@ func createAction(context *gin.Context) {
 	id, err := models.CreateAction(action)
 
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving action.", "err": err.Error()})
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving action.", "err": err.Error(), "action": action})
+		return
+	}
+
+	actionPrerequisites := []models.ActionPrerequisite{}
+	for _, prerequisiteID := range action.Prerequisites {
+		actionPrerequisites = append(actionPrerequisites, models.ActionPrerequisite{ActionID: id, PrerequisiteID: prerequisiteID})
+	}
+
+	err = models.AddActionPrerequisites(actionPrerequisites)
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving action prerequisites.", "err": err.Error()})
+		return
+	}
+
+	actionOutcomes := []models.ActionOutcome{}
+	for _, outcomeID := range action.Outcomes {
+		actionOutcomes = append(actionOutcomes, models.ActionOutcome{ActionID: id, OutcomeID: outcomeID})
+	}
+
+	err = models.AddActionOutcomes(actionOutcomes)
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving action outcomes.", "err": err.Error()})
 		return
 	}
 
@@ -80,6 +162,44 @@ func updateAction(context *gin.Context) {
 		return
 	}
 
+	actionPrerequisites := []models.ActionPrerequisite{}
+	for _, prerequisiteID := range action.Prerequisites {
+		actionPrerequisites = append(actionPrerequisites, models.ActionPrerequisite{ActionID: int64(id), PrerequisiteID: prerequisiteID})
+	}
+
+	err = models.RemoveActionPrerequisites(int64(id))
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error removing action prerequisites."})
+		return
+	}
+
+	err = models.AddActionPrerequisites(actionPrerequisites)
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving action prerequisites.", "err": err.Error()})
+		return
+	}
+
+	actionOutcomes := []models.ActionOutcome{}
+	for _, outcomeID := range action.Outcomes {
+		actionOutcomes = append(actionOutcomes, models.ActionOutcome{ActionID: int64(id), OutcomeID: outcomeID})
+	}
+
+	err = models.RemoveActionOutcomes(int64(id))
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error removing action outcomes."})
+		return
+	}
+
+	err = models.AddActionOutcomes(actionOutcomes)
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving action outcomes.", "err": err.Error()})
+		return
+	}
+
 	context.JSON(http.StatusOK, gin.H{})
 }
 
@@ -94,7 +214,21 @@ func deleteAction(context *gin.Context) {
 	err = models.DeleteAction(id)
 
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error deleting action."})
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error deleting action.", "err": err.Error()})
+		return
+	}
+
+	err = models.RemoveActionPrerequisites(int64(id))
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error removing action prerequisites."})
+		return
+	}
+
+	err = models.RemoveActionOutcomes(int64(id))
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error removing action outcomes."})
 		return
 	}
 
