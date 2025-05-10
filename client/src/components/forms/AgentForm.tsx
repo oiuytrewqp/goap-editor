@@ -136,9 +136,6 @@ const AgentForm: React.FC<AgentFormProps> = ({
         />
         
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-200 mb-1">
-            Goals (Priority Order)
-          </label>
           <DragDropList
             label="Goals (Priority Order)"
             items={selectedGoalIds.map(id => {
@@ -155,7 +152,7 @@ const AgentForm: React.FC<AgentFormProps> = ({
               value=""
               onChange={(e) => {
                 if (e.target.value && !selectedGoalIds.includes(e.target.value)) {
-                  setSelectedGoalIds([...selectedGoalIds, e.target.value]);
+                  setSelectedGoalIds([...selectedGoalIds, parseInt(e.target.value)]);
                 }
                 e.target.value = '';
               }}
