@@ -12,6 +12,8 @@ func GetActionPrerequisites(actionId int64) ([]int64, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	var prerequisites []int64
 	for rows.Next() {
 		var prerequisite int64

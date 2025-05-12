@@ -12,6 +12,8 @@ func GetAgentGoals(agentId int64) ([]int64, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	var goals []int64
 	for rows.Next() {
 		var goal int64

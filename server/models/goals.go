@@ -15,6 +15,8 @@ func GetGoals() ([]Goal, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	var goals []Goal
 	for rows.Next() {
 		var goal Goal
@@ -31,6 +33,8 @@ func GetGoal(id int) (Goal, error) {
 	if err != nil {
 		return Goal{}, err
 	}
+
+	defer rows.Close()
 
 	var goal Goal
 	err = rows.Scan(&goal.ID, &goal.Name, &goal.Priority, &goal.Description)

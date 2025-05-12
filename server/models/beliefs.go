@@ -14,6 +14,8 @@ func GetBeliefs() ([]Belief, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	var beliefs []Belief
 	for rows.Next() {
 		var belief Belief
@@ -30,6 +32,8 @@ func GetBelief(id int) (Belief, error) {
 	if err != nil {
 		return Belief{}, err
 	}
+
+	defer rows.Close()
 
 	var belief Belief
 	err = rows.Scan(&belief.ID, &belief.Name, &belief.Value, &belief.Description)

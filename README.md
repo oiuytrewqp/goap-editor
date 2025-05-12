@@ -93,3 +93,6 @@ At the moment the test envirtonment doesnt work.
 
 ## Add JSON Export
 Add functionality to export the GOAP setup as one JSON file for use in other applications.
+
+## Add Server Sent Events
+Add server sent events (SSE) sop that the server can be hooked up to an agent using n8n. (https://github.com/gin-gonic/examples/blob/master/server-sent-event/main.go)

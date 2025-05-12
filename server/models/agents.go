@@ -17,6 +17,8 @@ func GetAgents() ([]Agent, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	var agents []Agent
 	for rows.Next() {
 		var agent Agent
@@ -33,6 +35,8 @@ func GetAgent(id int) (Agent, error) {
 	if err != nil {
 		return Agent{}, err
 	}
+
+	defer rows.Close()
 
 	var agent Agent
 	err = rows.Scan(&agent.ID, &agent.Name, &agent.LocationID, &agent.Description)

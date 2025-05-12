@@ -12,6 +12,8 @@ func GetActionOutcomes(actionId int64) ([]int64, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	var outcomes []int64
 	for rows.Next() {
 		var outcome int64

@@ -13,6 +13,8 @@ func GetLocations() ([]Location, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	var locations []Location
 	for rows.Next() {
 		var location Location
@@ -29,6 +31,8 @@ func GetLocation(id int) (Location, error) {
 	if err != nil {
 		return Location{}, err
 	}
+
+	defer rows.Close()
 
 	var location Location
 	err = rows.Scan(&location.ID, &location.Name, &location.Description)

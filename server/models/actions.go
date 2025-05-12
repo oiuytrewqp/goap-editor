@@ -17,6 +17,8 @@ func GetActions() ([]Action, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	var actions []Action
 	for rows.Next() {
 		var action Action
@@ -33,6 +35,8 @@ func GetAction(id int) (Action, error) {
 	if err != nil {
 		return Action{}, err
 	}
+
+	defer rows.Close()
 
 	var action Action
 	err = rows.Scan(&action.ID, &action.Name, &action.Method, &action.LocationID, &action.Description)

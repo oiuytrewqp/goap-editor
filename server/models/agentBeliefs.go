@@ -12,6 +12,8 @@ func GetAgentBeliefs(agentId int64) ([]int64, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	var beliefs []int64
 	for rows.Next() {
 		var belief int64
